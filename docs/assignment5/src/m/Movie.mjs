@@ -251,6 +251,7 @@ Movie.update = function ({ movieId, title, releaseDate,
   personIdRefsToAdd, personIdRefsToRemove, director_id }) {
   const movie = Movie.instances[movieId],
     objectBeforeUpdate = cloneObject(movie);
+  console.log("director retured " + director_id);
   var noConstraintViolated = true, updatedProperties = [];
   try {
     if (title && movie.title !== title) {
@@ -274,7 +275,7 @@ Movie.update = function ({ movieId, title, releaseDate,
       }
     }
 
-    // publisher_id may be the empty string for unsetting the optional property
+    // person_id may be the empty string for unsetting the optional property
     if (director_id && (!movie.director && director_id ||
       movie.director && movie.director.name !== director_id)) {
       movie.director = director_id;

@@ -160,6 +160,7 @@ const updateFormEl = document.querySelector("section#Movie-U > form"),
   updateDirectorEl = updateFormEl["selectDirector"],
   updateReleaseDate = updateFormEl["releaseDate"],
   updSelMovieEl = updateFormEl["selectMovie"];
+var seletedDirID = "";
 
 
 document.getElementById("Update").addEventListener("click", function () {
@@ -213,8 +214,13 @@ updSelMovieEl.addEventListener("change", function () {
   });
 
   updateDirectorEl.addEventListener("click", function () {
+    var personName = updateFormEl["selectDirector"].value;
+    for (const personId of Object.keys(Person.instances)) {
+      const person = Person.instances[personId];
+      if (personName === person.name) seletedDirID = person.personId;
+    }
     updateDirectorEl.setCustomValidity(
-      Movie.checkDirector(updateFormEl["selectDirector"].selectedIndex).message);
+      Movie.checkDirector(seletedDirID).message);
   });
 
 });
@@ -227,13 +233,15 @@ updateFormEl["commit"].addEventListener("click", function () {
   const slots = {
     movieId: updateFormEl["movieId"].value,
     title: updateFormEl["title"].value,
-    releaseDate: updateFormEl["releaseDate"].value,
-    director_id: updateFormEl["selectDirector"].selectedIndex
+    releaseDate: updateFormEl["releaseDate"].value
   };
   // add event listeners for responsive validation
   /* MISSING CODE */
   // commit the update only if all form field values are valid
+
   if (updateFormEl.checkValidity()) {
+    //add the updated dirctor
+    slots.director_id = seletedDirID;
     // construct personIdRefs-ToAdd/ToRemove lists
     const personIdRefsToAdd = [], personIdRefsToRemove = [];
     for (const personItemEl of selectedPersonsListEl.children) {

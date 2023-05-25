@@ -172,7 +172,7 @@ Person.update = function ({ personId, name }) {
 };
 /**
  *  Delete an person object/record
- *  Since the movie-person association is unidirectional, a linear search on all
+ *  Since the movie-person association is bidirectional, a linear search on all
  *  movies is required for being able to delete the person from the movies' persons.
  */
 Person.destroy = function (personId) {
@@ -180,7 +180,9 @@ Person.destroy = function (personId) {
   // delete all dependent movie records
   for (const movieId of Object.keys(Movie.instances)) {
     const movie = Movie.instances[movieId];
-    if (personId in movie.actors) delete movie.actors[personId];
+    if (parseInt(movie.director.personId) === parseInt(personId)) {
+      Movie.destroy(movieId);
+    } else if (personId in movie.actors) delete movie.actors[personId];
   }
   // delete the person object
   delete Person.instances[personId];
